@@ -38,11 +38,23 @@
               'include_dirs': [
                 '/usr/include/libxml2/',
               ],
-              'link_settings': {
-                'libraries': [
-                  '-lxml2',
-                ],
-              },
+
+              'conditions': [
+                ['OS == "mac" or OS == "ios"', {
+                  'link_settings': {
+                    'libraries': [
+                      '$(SDKROOT)/usr/lib/libxml2.dylib',
+                    ],
+                  },
+                }, { # OS != "mac" and OS != "ios"
+                  'link_settings': {
+                    'libraries': [
+                      '-lxml2',
+                    ],
+                  },
+                }], # OS == "mac" and OS == "ios"
+              ], # conditions
+
             }, { # !use_system_libxml
               'dependencies': [
                 '<(DEPTH)/third_party/libxml/libxml.gyp:libxml',
